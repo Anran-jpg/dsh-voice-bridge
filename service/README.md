@@ -4,13 +4,13 @@
 
 | 组件 | 脚本 | 作用 | 端口 |
 |---|---|---|---|
-| TTS 服务 | `E:\DSH_Work\voice\tts-server.py` | GPT-SoVITS v2Pro 克隆音色，`POST /speak {text, play, pet}` | 8777 |
-| F8 语音输入 | `E:\DSH_Work\voice\voice-in.py` | 按住 F8 说话 → FunASR 识别 → 粘进前台窗口 | — |
-| 桌宠朗读 | `E:\DSH_Work\voice\pet-voice.py` | 轮询桌宠 `/state`，新气泡自动念出来 | 跟着 DSH GUI 端口走 |
-| 看门狗 | `E:\DSH_Work\voice\sup.py` | 开机自启，监控上面三个，挂了自动拉起 | — |
-| 公共件 | `E:\DSH_Work\voice\common\` | `settings.py`（路径+端口）/ `config.py` / `log.py` / `http.py` / `ports.py` / `audio.py`（wav/播放）/ `desktop.py`（提示音/前台窗口/剪贴板），四个脚本共用 | — |
-| 文本规范化 | `E:\DSH_Work\voice\tts_text.py` | 数字转中文读法、去 markdown、英文谐音；纯函数，`tts\_test_sanitize.py` 直接测它 | — |
-| 热键绑定 | `E:\DSH_Work\voice\hotkeys.py` | `HotkeyBinder`：绑 F8、hold/toggle 两种模式、配置改了自动换键 | — |
+| TTS 服务 | `<工作区>\voice\tts-server.py` | GPT-SoVITS v2Pro 克隆音色，`POST /speak {text, play, pet}` | 8777 |
+| F8 语音输入 | `<工作区>\voice\voice-in.py` | 按住 F8 说话 → FunASR 识别 → 粘进前台窗口 | — |
+| 桌宠朗读 | `<工作区>\voice\pet-voice.py` | 轮询桌宠 `/state`，新气泡自动念出来 | 跟着 DSH GUI 端口走 |
+| 看门狗 | `<工作区>\voice\sup.py` | 开机自启，监控上面三个，挂了自动拉起 | — |
+| 公共件 | `<工作区>\voice\common\` | `settings.py`（路径+端口）/ `config.py` / `log.py` / `http.py` / `ports.py` / `audio.py`（wav/播放）/ `desktop.py`（提示音/前台窗口/剪贴板），四个脚本共用 | — |
+| 文本规范化 | `<工作区>\voice\tts_text.py` | 数字转中文读法、去 markdown、英文谐音；纯函数，`tts\_test_sanitize.py` 直接测它 | — |
+| 热键绑定 | `<工作区>\voice\hotkeys.py` | `HotkeyBinder`：绑 F8、hold/toggle 两种模式、配置改了自动换键 | — |
 
 脚本都放在 `voice\`，**模型、参考音、合成产物仍留在 `tts\`**（`tts\GPT-SoVITS-main`、`tts\ref\ref-8s.wav`、`tts\out\server\`），
 `tts-server.py` 里按 `HERE=voice\` → `ROOT=DSH_Work\` → `TTS_ROOT=tts\` 推算，也可以用
@@ -19,8 +19,8 @@
 ## 开机自启怎么实现的
 
 - 快捷方式：`%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\大肥鱼语音看门狗.lnk`
-- 目标：`E:\DSH_Work\tts\venv\Scripts\pythonw.exe "E:\DSH_Work\voice\sup.py"`
-- 用 `pythonw.exe` 所以没有黑窗口；工作目录在 `E:\DSH_Work\voice`
+- 目标：`<工作区>\tts\venv\Scripts\pythonw.exe "<工作区>\voice\sup.py"`
+- 用 `pythonw.exe` 所以没有黑窗口；工作目录在 `<工作区>\voice`
 
 ## 看门狗做什么
 
@@ -47,14 +47,14 @@
 ## 常用命令
 
 ```powershell
-$py = 'E:\DSH_Work\tts\venv\Scripts\python.exe'
-& $py E:\DSH_Work\voice\sup.py --status    # 看状态：tts 健康、GUI 端口、各脚本 pid
-& $py E:\DSH_Work\voice\sup.py --once      # 只体检一遍，缺啥补啥
+$py = '<工作区>\tts\venv\Scripts\python.exe'
+& $py <工作区>\voice\sup.py --status    # 看状态：tts 健康、GUI 端口、各脚本 pid
+& $py <工作区>\voice\sup.py --once      # 只体检一遍，缺啥补啥
 ```
 
 ## 日志
 
-所有日志统一放在 **`E:\DSH_Work\voice\logs\`**，单份上限 **2 MB**，超了自动裁剪到**最后 500 KB**（看门狗每 4 轮扫一次；`voice-in.py` 写自己那份时也会顺手裁）。
+所有日志统一放在 **`<工作区>\voice\logs\`**，单份上限 **2 MB**，超了自动裁剪到**最后 500 KB**（看门狗每 4 轮扫一次；`voice-in.py` 写自己那份时也会顺手裁）。
 
 | 文件 | 内容 | 上限 |
 |---|---|---|
