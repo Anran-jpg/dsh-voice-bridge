@@ -1,20 +1,37 @@
 # -*- coding: utf-8 -*-
 """在哪、用哪个端口 —— 四个脚本共用的一份。
 
-以前「E:\\DSH_Work」和「8777」这两个字面量散在四个文件里，改一个地方要翻四遍，
-而且挪目录时会漏。这里按 `common/` 的位置往上推，一步算清：
+**代码和数据分开**：
+    service/common/  ->  service/           代码（跟着插件包走：node_modules\\dsh-voice-bridge\\service\\）
+    <工作区>/voice/  ->  config.json、in\\、logs\\、sup.pid   运行时数据（不跟着包走）
+    <工作区>/tts/    ->  GPT-SoVITS-main、ref\\、out\\、venv\\   模型与素材（几十 G，不能跟包走）
 
-    common/  ->  voice/  ->  DSH_Work/                       （代码）
-    DSH_Work/tts/  GPT-SoVITS-main / ref/ / out/ / venv/     （模型与素材）
+所以「代码在哪个目录」和「数据写到哪个目录」是两件事：
+    SERVICE = 这个 common/ 的上一级           —— 脚本在哪
+    ROOT    = 工作区                          —— DSH_WORKSPACE，或 SERVICE 的上一级（当它下面有 tts\\）
+    VOICE   = ROOT/voice                      —— 配置、录音、日志、pid
 
-模型和素材故意不跟着代码搬：GPT-SoVITS 有几十 G，挪一次得复制一遍。
-要换位置就用 DSH_TTS_ROOT / DSH_TTS_REPO / DSH_TTS_REF / DSH_TTS_OUT 覆盖。
+覆盖开关：DSH_WORKSPACE / DSH_VOICE_DATA / DSH_TTS_ROOT / DSH_TTS_REPO / DSH_TTS_REF / DSH_TTS_OUT。
 """
 import os
 
-HERE = os.path.dirname(os.path.abspath(__file__))   # ...\voice\common
-VOICE = os.path.dirname(HERE)                       # ...\voice
-ROOT = os.path.dirname(VOICE)                       # ...\DSH_Work
+HERE = os.path.dirname(os.path.abspath(__file__))   # ...\service\common
+SERVICE = os.path.dirname(HERE)                     # ...\service   （代码就住这）
+
+
+def _workspace():
+    """工作区：有环境变量听环境变量；否则看代码目录的上一级像不像工作区。"""
+    env = os.environ.get("DSH_WORKSPACE")
+    if env:
+        return env
+    parent = os.path.dirname(SERVICE)
+    if os.path.isdir(os.path.join(parent, "tts")) or os.path.isdir(os.path.join(parent, "voice")):
+        return parent
+    return os.getcwd()
+
+
+ROOT = _workspace()                                             # 工作区（跑起来的 cwd）
+VOICE = os.environ.get("DSH_VOICE_DATA") or os.path.join(ROOT, "voice")   # 运行时数据
 
 TTS_ROOT = os.environ.get("DSH_TTS_ROOT") or os.path.join(ROOT, "tts")
 REPO = os.environ.get("DSH_TTS_REPO") or os.path.join(TTS_ROOT, "GPT-SoVITS-main")

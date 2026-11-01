@@ -30,8 +30,8 @@ from common import settings as vsettings
 from common.log import cap_all, log as _log
 from common.ports import find_gui_port
 
-HERE = vsettings.VOICE
-BASE = vsettings.ROOT
+HERE = vsettings.SERVICE      # 代码目录（service\，跟着插件包走）
+BASE = vsettings.ROOT         # 工作区：子进程的 cwd、模型/素材的根
 PY = vsettings.PY
 TTS_PORT = vsettings.TTS_PORT
 LOG_DIR = vsettings.LOG_DIR
