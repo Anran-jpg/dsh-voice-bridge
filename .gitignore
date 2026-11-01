@@ -1,0 +1,7 @@
+node_modules/
+*.log
+*.wav
+*.mp3
+voice/in/
+sup.pid
+.DS_Store

@@ -1,0 +1,42 @@
+{
+  "name": "dsh-voice-bridge",
+  "version": "0.2.0",
+  "description": "语音桥：把一句话投进 DSH 会话，拿到回复再念出来；支持热键与唤醒词、官方/本地识别引擎、四家朗读引擎、桌宠气泡同步、录音清理与本地 TTS 自启。设置里有「语音桥」面板。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "voice",
+    "tts",
+    "asr"
+  ],
+  "scripts": {
+    "test": "node tests/config.test.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": []
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,36 @@
+{
+  "hotkey": "f8",
+  "mode": "hold",
+  "device": "Mic In (Elgato Wave:3)",
+  "samplerate": 16000,
+  "min_seconds": 0.35,
+  "min_record_seconds": 0.6,
+  "silence_sec": 1.15,
+  "max_record_seconds": 60,
+  "auto_stop": true,
+  "beep": true,
+  "punctuate": true,
+  "punc_model": "iic/punc_ct-transformer_zh-cn-common-vocab272727-pytorch",
+  "only_paste_in": [
+    "DeepSeek Harness"
+  ],
+  "fix_words": {
+    "大飞鱼": "大肥鱼",
+    "大肥遇": "大肥鱼",
+    "饿鲸鲸": "哦鲸鲸",
+    "哦京京": "哦鲸鲸",
+    "低艾斯艾尺": "DSH"
+  },
+  "asr_model": "paraformer-zh",
+  "hotwords": "大肥鱼 先养着吧 哦鲸鲸 白饭 token DSH",
+  "paste_to_window": true,
+  "press_enter": false,
+  "log": "<工作区>\\voice\\logs\\voice-in.log",
+  "trigger_mode": "wakeword",
+  "wake_words": "大肥鱼",
+  "wake_reply": "在",
+  "wake_silence_sec": 1,
+  "wake_max_sec": 60,
+  "input_enabled": true,
+  "wake_pose": "被吓一跳"
+}
