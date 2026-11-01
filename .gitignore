@@ -7,3 +7,4 @@ sup.pid
 .DS_Store
 __pycache__/
 *.pyc
+service/data/

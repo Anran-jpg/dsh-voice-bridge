@@ -39,7 +39,7 @@ dsh plugin --profile desktop add https://github.com/Anran-jpg/dsh-voice-bridge/t
 ### 维护
 
 - **本地 TTS 自启**：DSH 起来时如果本地 TTS 没在跑，插件会把看门狗拉起来（面板上也有「帮我拉起来」按钮）
-- **录音清理**：每句录音落在 `<工作区>\voice\in\`，默认保留 15 天，启动时自动清，也能手动「现在清一次」
+- **录音清理**：每句录音落在 `<插件包>\service\data\in\`，默认保留 15 天，启动时自动清，也能手动「现在清一次」
 - **会话**：跟着最新会话走 / 固定投给一个会话 / 每次新建
 
 ## 依赖
@@ -56,7 +56,7 @@ Python 那套（`tts-server.py` / `pet-voice.py` / `voice-in.py` / `sup.py` / `c
 
 ## 配置
 
-面板里改的都写进 `$DSH_HOME/voice-bridge/config.json`（Windows 一般是 `C:\Users\<你>\.dsh\voice-bridge\config.json`）；语音输入那套设置写在 `<工作区>\voice\config.json`。插件行里的 `config:` 优先级最高。
+面板里改的都写进 `$DSH_HOME/voice-bridge/config.json`（Windows 一般是 `C:\Users\<你>\.dsh\voice-bridge\config.json`）；语音输入那套设置写在 `<插件包>\service\data\config.json`（配置、录音、日志、pid 都在这个 `data` 目录里；模型仍留在 `<工作区>\tts\`）。注意：**重装插件会换掉整个包目录**，所以 `service\data` 里的东西要么先备份，要么用环境变量 `DSH_VOICE_DATA` 指到包外面。插件行里的 `config:` 优先级最高。
 
 ## 路由（只认 127.0.0.1）
 

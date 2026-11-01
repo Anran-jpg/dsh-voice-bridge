@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """在哪、用哪个端口 —— 四个脚本共用的一份。
 
-**代码和数据分开**：
-    service/common/  ->  service/           代码（跟着插件包走：node_modules\\dsh-voice-bridge\\service\\）
-    <工作区>/voice/  ->  config.json、in\\、logs\\、sup.pid   运行时数据（不跟着包走）
-    <工作区>/tts/    ->  GPT-SoVITS-main、ref\\、out\\、venv\\   模型与素材（几十 G，不能跟包走）
+**代码、配置、录音、日志都在插件包里**，只有模型和素材留在工作区：
+    service/            -> 代码（sup.py / voice-in.py / tts-server.py / pet-voice.py …）
+    service/data/       ->  config.json、in\\（录音）、logs\\、sup.pid    运行时数据
+    <工作区>/tts/       ->  GPT-SoVITS-main、ref\\、out\\、venv\\          模型与素材（几十 G，不能跟包走）
 
-所以「代码在哪个目录」和「数据写到哪个目录」是两件事：
+所以「代码在哪个目录」和「模型在哪个目录」是两件事：
     SERVICE = 这个 common/ 的上一级           —— 脚本在哪
+    VOICE   = SERVICE/data                    —— 配置、录音、日志、pid
     ROOT    = 工作区                          —— DSH_WORKSPACE，或 SERVICE 的上一级（当它下面有 tts\\）
-    VOICE   = ROOT/voice                      —— 配置、录音、日志、pid
 
 覆盖开关：DSH_WORKSPACE / DSH_VOICE_DATA / DSH_TTS_ROOT / DSH_TTS_REPO / DSH_TTS_REF / DSH_TTS_OUT。
 """
@@ -30,8 +30,9 @@ def _workspace():
     return os.getcwd()
 
 
-ROOT = _workspace()                                             # 工作区（跑起来的 cwd）
-VOICE = os.environ.get("DSH_VOICE_DATA") or os.path.join(ROOT, "voice")   # 运行时数据
+ROOT = _workspace()                                             # 工作区（模型与素材在这）
+# 运行时数据（配置 / 录音 / 日志 / pid）跟着代码走：service\data\
+VOICE = os.environ.get("DSH_VOICE_DATA") or os.path.join(SERVICE, "data")
 
 TTS_ROOT = os.environ.get("DSH_TTS_ROOT") or os.path.join(ROOT, "tts")
 REPO = os.environ.get("DSH_TTS_REPO") or os.path.join(TTS_ROOT, "GPT-SoVITS-main")

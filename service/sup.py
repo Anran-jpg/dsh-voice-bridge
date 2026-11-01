@@ -21,6 +21,7 @@
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -272,6 +273,24 @@ class Supervisor:
             time.sleep(idle)
 
 
+def seed_data():
+    """数据目录（service\\data）里没有 config.json 时，从旧位置捞一份。
+
+    重装插件会把包目录整个换掉，service\\data 跟着没了；工作区里那份老配置
+    如果还在，就先拿它顶上，省得重装后要重新挑声卡、重设唤醒词。
+    """
+    try:
+        if os.path.isfile(vsettings.CONFIG):
+            return
+        legacy = os.path.join(vsettings.ROOT, "voice", "config.json")
+        if os.path.isfile(legacy):
+            os.makedirs(vsettings.VOICE, exist_ok=True)
+            shutil.copyfile(legacy, vsettings.CONFIG)
+            print("[sup] 数据目录里没有 config.json，从旧位置拷了一份：%s" % legacy)
+    except Exception as e:
+        print("[sup] 拷旧配置失败：%s" % e)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="大肥鱼语音看门狗")
     ap.add_argument("--once", action="store_true", help="只体检一轮就退出")
@@ -279,6 +298,7 @@ def main(argv=None):
     ap.add_argument("--interval", type=float, default=5.0, help="体检间隔秒数")
     args = ap.parse_args(argv)
 
+    seed_data()
     os.makedirs(LOG_DIR, exist_ok=True)
     sup = Supervisor()
 
