@@ -7,7 +7,7 @@
 ## 装
 
 ```powershell
-dsh plugin --profile desktop add https://github.com/<你的账号>/dsh-voice-bridge/tarball/main
+dsh plugin --profile desktop add https://github.com/Anran-jpg/dsh-voice-bridge/tarball/main
 ```
 
 装完**重启一次 DSH**（bundle 只在启动时解析），然后打开「设置 → 语音桥」。
